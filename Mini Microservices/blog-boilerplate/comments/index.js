@@ -1,0 +1,38 @@
+const express = require("express");
+const { randomBytes } = require("crypto");
+
+const app = express();
+
+app.use(express.json());
+
+const commentsByPostId = {};
+
+app.get("/posts/:id/comments", (req, res) => {
+  const postId = req.params.id;
+
+  const comments = commentsByPostId[postId] || [];
+
+  res.send(comments);
+});
+
+app.post("/posts/:id/comments", (req, res) => {
+  const commentId = randomBytes(4).toString("hex");
+
+  const postId = req.params.id;
+  const { content } = req.body;
+
+  const comments = commentsByPostId[postId] || [];
+
+  const comment = {
+    id: commentId,
+    content,
+  };
+
+  commentsByPostId[postId] = [...comments, comment];
+
+  res.status(201).send(comment);
+});
+
+app.listen(4001, () => {
+  console.log("Comments service listening on port 4001");
+});
