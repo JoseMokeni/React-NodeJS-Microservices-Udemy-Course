@@ -1,0 +1,8 @@
+# ignore every node_modules folder; in every folder and subfolder
+
+node_modules/
+
+# ignore every .git folder; in every folder and subfolder
+
+.git/
+
